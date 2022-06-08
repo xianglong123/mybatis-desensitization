@@ -2,6 +2,7 @@ package com.cas.autoconfigure;
 
 import com.cas.Interceptor.DecryptOutMybatisInterceptor;
 import com.cas.Interceptor.EncryptInMybatisInterceptor;
+import com.cas.Interceptor.SqlCostInterceptor;
 import com.cas.service.Desensitize;
 import org.apache.ibatis.mapping.DatabaseIdProvider;
 import org.springframework.beans.factory.ObjectProvider;
@@ -33,6 +34,11 @@ public class DesensitizeAutoConfiguration {
     @Bean
     public EncryptInMybatisInterceptor encryptInMybatisInterceptor() {
         return new EncryptInMybatisInterceptor(desensitize);
+    }
+
+    @Bean
+    public SqlCostInterceptor sqlCostInterceptor() {
+        return new SqlCostInterceptor();
     }
 
 }
