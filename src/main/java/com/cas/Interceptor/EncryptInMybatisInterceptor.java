@@ -17,6 +17,9 @@ import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Field;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -60,7 +63,8 @@ public class EncryptInMybatisInterceptor implements Interceptor {
             ConfidentialType confidentialType = AnnotationUtils.findAnnotation(parameterObjectClass, ConfidentialType.class);
             if (Objects.nonNull(confidentialType)) {
                 //取出当前当前类所有字段，传入加密方法
-                Field[] declaredFields = parameterObjectClass.getDeclaredFields();
+                List<Field> declaredFields = new ArrayList<>();
+                getFieldList(parameterObjectClass, declaredFields);
                 for (Field field : declaredFields) {
                     Confidential confidential = field.getAnnotation(Confidential.class);
                     if (!Objects.isNull(confidential)) {
@@ -77,6 +81,19 @@ public class EncryptInMybatisInterceptor implements Interceptor {
         return invocation.proceed();
     }
 
+    private void getFieldList(Class<?> clazz, List<Field> fieldList) {
+        if (null == clazz) {
+            return;
+        }
+        Field[] fields = clazz.getDeclaredFields();
+        fieldList.addAll(Arrays.asList(fields));
+        /** 处理父类字段**/
+        Class<?> superClass = clazz.getSuperclass();
+        if (superClass.equals(Object.class)) {
+            return;
+        }
+        getFieldList(superClass, fieldList);
+    }
 
     @Override
     public Object plugin(Object target) {
