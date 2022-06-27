@@ -48,6 +48,11 @@ public class Account {
     // ...
 }
 ```
+
+### 案例
+    请查看我的项目，里面有具体的使用方式
+<a>https://github.com/xianglong123/cas-druid</a> 
+
     这样你在传入userId的时候就会自动通过你实现的接口进行加解密。进而节约你的时间和成本
 ## 如果帮助到您，请给我点一个start，谢谢
 ![](.README_images/1a93b674.png)
