@@ -8,7 +8,7 @@
 **引用方式：implementation 'com.cas:mybatis-desensitization:0.0.1'**
 
     1、配置文件开启
-    在application.yml 中配置开启分页插件
+    在application.yml 中配置开启加解密插件
     
 ```yaml
 cas:
