@@ -1,6 +1,5 @@
 package com.cas.Interceptor;
 
-import cn.hutool.extra.spring.SpringUtil;
 import com.cas.annotation.Confidential;
 import com.cas.annotation.ConfidentialType;
 import com.cas.service.Desensitize;
@@ -84,17 +83,16 @@ public class DecryptOutMybatisInterceptor implements Interceptor {
                 }
                 Object val = ps.getReadMethod().invoke(object);
                 if (val != null) {
-                    // 获取db中的加密数据
-                    Object db = ps.getReadMethod().invoke(object);
-                    if (db instanceof String) {
-                        String mobile = String.valueOf(db);
-                        ps.getWriteMethod().invoke(object, desensitize.decryptData(mobile));
+                    if (val instanceof String) {
+                        String value = String.valueOf(val);
+                        ps.getWriteMethod().invoke(object, desensitize.decryptData(value));
                     }
                 }
             }
         }
         return object;
     }
+
 
     @Override
     public Object plugin(Object target) {

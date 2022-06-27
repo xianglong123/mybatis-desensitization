@@ -1,6 +1,5 @@
 package com.cas.Interceptor;
 
-import cn.hutool.extra.spring.SpringUtil;
 import com.cas.annotation.Confidential;
 import com.cas.annotation.ConfidentialType;
 import com.cas.service.Desensitize;
@@ -22,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author: xianglong[1391086179@qq.com]
@@ -72,13 +73,46 @@ public class EncryptInMybatisInterceptor implements Interceptor {
                         Object object = field.get(parameterObject);
                         if (object instanceof String) {
                             String value = (String) object;
-                            field.set(parameterObject, desensitize.encryptData(value));
+                            if (checkRegular(confidential, value)) {
+                                // 满足属性校验则加密
+                                field.set(parameterObject, desensitize.encryptData(value));
+                            }
                         }
                     }
                 }
             }
         }
         return invocation.proceed();
+    }
+
+    /**
+     * 属性校验
+     * 长度 > 正则 > 其他
+     * @return
+     * @param confidential
+     * @param value
+     */
+    public boolean checkRegular(Confidential confidential, String value) {
+        // 1、检查是否开启属性校验
+        if (!confidential.value()) {
+            return true;
+        }
+
+        // 2、长度校验
+        if (value.length() > confidential.len()) {
+            return false;
+        }
+
+        // 3、正则校验
+        String regular = confidential.regular();
+        // 3.1 正则为空代表不校验
+        if ("".equals(regular)) {
+            return true;
+        }
+        Pattern pattern = Pattern.compile(regular);
+        Matcher matcher = pattern.matcher(value);
+        // 4、通过返回true, 失败返回false
+        return matcher.matches();
     }
 
     private void getFieldList(Class<?> clazz, List<Field> fieldList) {

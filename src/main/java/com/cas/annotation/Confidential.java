@@ -16,4 +16,22 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface Confidential {
+
+    /**
+     * 是否启动属性校验
+     * @return
+     */
+    boolean value() default false;
+
+    /**
+     * 属性的正则匹配
+     */
+    String regular() default "";
+
+    /**
+     * 属性的长度匹配, 要求属性长度<=len()
+     * @return
+     */
+    int len() default Integer.MAX_VALUE;
+
 }
