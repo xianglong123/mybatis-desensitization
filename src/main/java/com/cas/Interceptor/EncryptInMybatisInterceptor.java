@@ -99,7 +99,7 @@ public class EncryptInMybatisInterceptor implements Interceptor {
         }
 
         // 2、长度校验
-        if (value.length() > confidential.len()) {
+        if (value.length() > confidential.max()) {
             return false;
         }
 

@@ -32,6 +32,6 @@ public @interface Confidential {
      * 属性的长度匹配, 要求属性长度<=len()
      * @return
      */
-    int len() default Integer.MAX_VALUE;
+    int max() default Integer.MAX_VALUE;
 
 }

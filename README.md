@@ -42,7 +42,7 @@ public class Account {
     /**
     * 确认要校验，长度最长为20，正则表达式满足："^\\d{1,10}$"
     */
-    @Confidential(value = true, len = 20, regular = "^\\d{1,10}$")
+    @Confidential(value = true, max = 20, regular = "^\\d{1,10}$")
     private String userId;
     private Float balance;
     // ...
